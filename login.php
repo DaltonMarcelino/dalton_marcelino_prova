@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
     $sql = "SELECT * FROM usuario WHERE email = :email";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam('email',$email);
+    $stmt->bindParam(':email',$email);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -31,7 +31,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     } else{
         // LOGIN INVÁLIDO
         echo "<script>alert('E-mail ou senha incorretos');window.location.href='login.php';</script>";
-    }
+    } 
 }
 ?>
 <!DOCTYPE html>
