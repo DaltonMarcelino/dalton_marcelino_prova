@@ -66,4 +66,3 @@ try {
 // Se este arquivo for incluído (usando 'require' ou 'include') em outros scripts PHP,
 // a variável $pdo estará disponível para eles.
 ?>
-
