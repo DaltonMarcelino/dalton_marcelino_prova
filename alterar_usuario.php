@@ -23,11 +23,11 @@
             } else {
                 $sql = "SELECT * FROM usuario WHERE nome LIKE :busca_nome";
                 $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':busca_nome',"%$busca_nome%",PDO::PARAM_STR);
+                $stmt->bindValue(':busca_nome',"%$busca%",PDO::PARAM_STR);
             }
 
             $stmt->execute();
-            $usuario = $stmt-fetch(PDO::FETCH_ASSOC);
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Se o usuario não for encontrado, exibe um alerta
             if(!$usuario){
@@ -78,8 +78,16 @@
                 <option value="4" <?=$usuario['id_perfil'] == 4 ?'select':''?>>Cliente</option>
             </select>
 
+            <!-- Se o usuario logado for ADM, exibir opção de alterar senha -->
+            <?php if($_SESSION['perfil'] == 1): ?>
+                <label for="nova_senha">Nova senha</label>
+                <input type="password" id="nova_senha" name="nova_senha">
+            <?php endif; ?>
 
+            <button type="submit">Alterar</button>
+            <button type="reset">Cancelar</button>
         </form>
-    
+    <?php endif;?>
+    <a href="principal.php">Voltar</a>
 </body>
 </html>

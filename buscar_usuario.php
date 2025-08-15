@@ -38,6 +38,7 @@ $usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>Buscar Usuario</title>
 </head>
@@ -50,30 +51,33 @@ $usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
         <button type="submit">Pesquisar</button>
     </form>
         <?php if(!empty($usuarios)): ?>
-            <table border="1">
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Perfil</th>
-                    <th>Ações</th>
-                </tr>
-
-            <?php foreach($usuarios as $usuario): ?>
-
-                <tr>
-                    <td><?=htmlspecialchars($usuario['id_usuario'])?></td>
-                    <td><?=htmlspecialchars($usuario['nome'])?></td>
-                    <td><?=htmlspecialchars($usuario['email'])?></td>
-                    <td><?=htmlspecialchars($usuario['id_perfil'])?></td>
-                    <td>
-                        <a href="alterar_usuario.php?id=<?=htmlspecialchars($usuario['id_usuario'])?>">Alterar</a>
-                        <a href="excluir_usuario.php?id=<?=htmlspecialchars($usuario['id_usuario'])?>"
-                        onclick="return confirm('Tem certeza que deseja excluir este usuario?')">Excluir</a>
-                    </td>
-                </tr>
-            <?php endforeach;?>    
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Perfil</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($usuarios as $usuario): ?>
+                        <tr>
+                            <td><?=htmlspecialchars($usuario['id_usuario'])?></td>
+                            <td><?=htmlspecialchars($usuario['nome'])?></td>
+                            <td><?=htmlspecialchars($usuario['email'])?></td>
+                            <td><?=htmlspecialchars($usuario['id_perfil'])?></td>
+                            <td>
+                                <a href="alterar_usuario.php?id=<?=htmlspecialchars($usuario['id_usuario'])?>" class="btn btn-sm btn-primary me-1">Alterar</a>
+                                <a href="excluir_usuario.php?id=<?=htmlspecialchars($usuario['id_usuario'])?>" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Tem certeza que deseja excluir este usuario?')">Excluir</a>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                </tbody>
             </table>
+
             <?php else:?>
                 <p>Nenhum usuario encontrado.</p>
             <?php endif;?>
