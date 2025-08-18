@@ -32,6 +32,58 @@ session_start();
             echo "<script>alert('Erro ao excluir o usuario!');</script>";
         }
     }
+
+    // Obtendo o nome do perfil do usuário logado
+    $id_perfil = $_SESSION['perfil'];
+    $sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
+    $stmtPerfil = $pdo->prepare($sqlPerfil);
+    $stmtPerfil->bindParam(':id_perfil',$id_perfil);
+    $stmtPerfil->execute();
+    $perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
+    $nomePerfil = $perfil['nome_perfil'];
+    
+    // Definição das permissões por perfil
+    $permissoes = [
+        1 => ["Cadastrar" => ["cadastro_usuario.php", "cadastro_perfil.php", "cadastro_cliente.php",
+                               "cadastro_fornecedor.php", "cadastro_produto.php", "cadastro_funcionario.php"],
+
+              "Buscar" => ["buscar_usuario.php", "buscar_perfil.php", "buscar_cliente.php",
+                           "buscar_fornecedor.php", "buscar_produto.php", "buscar_funcionario.php"],
+
+              "Alterar" => ["alterar_usuario.php", "alterar_perfil.php", "alterar_cliente.php",
+                           "alterar_fornecedor.php", "alterar_produto.php", "alterar_funcionario.php"],
+
+              "Excluir" => ["excluir_usuario.php", "excluir_perfil.php", "excluir_cliente.php",
+                           "excluir_fornecedor.php", "excluir_produto.php", "excluir_funcionario.php"]],
+
+
+        2 => ["Cadastrar" => ["cadastro_cliente.php"],
+
+              "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
+
+              "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
+
+              "Excluir" => ["excluir_produto.php"]],
+
+
+        3 => ["Cadastrar" => ["cadastro_fornecedor.php", "cadastro_produto.php"],
+
+              "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
+
+              "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
+
+              "Excluir" => ["excluir_produto.php"]],
+
+
+        4 => ["Cadastrar" => ["cadastro_cliente.php"],
+
+              "Buscar" => ["buscar_produto.php"],
+
+              "Alterar" => ["alterar_cliente.php"]],
+    ];
+
+    // Obtendo as opções disponíveis para o perfil logado
+    $opcoes_menu = $permissoes["$id_perfil"];
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +96,26 @@ session_start();
     <title>Excluir Usuario</title>
 </head>
 <body>
-    <h2>Excluir Usuario</h2>
+    <!-- Header  -->
+    <nav>
+        <ul class="menu">
+            <?php foreach($opcoes_menu as $categoria =>$arquivos): ?>
+                <li class="dropdown">
+                    <a href="#"><?=$categoria ?></a>
+                    <ul class="dropdown-menu">
+                        <?php foreach($arquivos as $arquivo): ?>
+                            <li>
+                                <a href="<?=$arquivo ?>"><?=ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
+                            </li>
+                            <?php endforeach;?>
+                    </ul>
+                </li>
+                <?php endforeach;?>
+        </ul>
+    </nav>
+    <br>
+
+    <h2>Excluir Usuario</h2><br>
     <?php if(!empty($usuarios)): ?>
         <!-- Tabela com Bootstrap 5 -->
 <div class="table-responsive">
@@ -80,7 +151,13 @@ session_start();
             <p>Nenhum usuário encontrado</p>
     <?php endif; ?>
 
-        <a href="principal.php">Voltar</a>
+    <a href="principal.php" class="btn btn-primary">Voltar</a>
+    <br><br>
+    
+    <center>
+        <address><em>Dalton Marcelino / Tecnico em Desenvolvimento de Sistemas / DESN20242V1</em></address>
+    </center>
+
         
 </body>
 </html>

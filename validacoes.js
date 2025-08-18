@@ -22,3 +22,21 @@ function validarFuncionario() {
 
     return true;
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const campoNome = document.getElementById('nome');
+    
+    campoNome.addEventListener('input', function() {
+        // Remove qualquer caractere que não seja letra, espaço ou acento
+        this.value = this.value.replace(/[^A-Za-zÀ-ú\s]/g, '');
+    });
+    
+    campoNome.addEventListener('blur', function() {
+        // Verifica se após a edição ainda há algum caractere inválido
+        if (/[^A-Za-zÀ-ú\s]/.test(this.value)) {
+            alert('Por favor, digite apenas letras no campo de nome.');
+            this.value = this.value.replace(/[^A-Za-zÀ-ú\s]/g, '');
+            this.focus();
+        }
+    });
+});

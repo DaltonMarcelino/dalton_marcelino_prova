@@ -165,6 +165,7 @@ button {
     transition: 0.3s;
 }
 
+
 button:hover {
     background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
 }

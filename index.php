@@ -58,5 +58,11 @@
     </form>
     
     <p><a href="recuperar_senha.php">Esqueci a minha senha</a></p>
+
+    <center>
+        <address><em>Dalton Marcelino / Tecnico em Desenvolvimento de Sistemas / DESN20242V1</em></address>
+    </center>
 </body>
+   
+    
 </html>

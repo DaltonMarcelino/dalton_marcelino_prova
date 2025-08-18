@@ -30,6 +30,58 @@
 
         }
     }
+
+    // Obtendo o nome do perfil do usuário logado
+    $id_perfil = $_SESSION['perfil'];
+    $sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
+    $stmtPerfil = $pdo->prepare($sqlPerfil);
+    $stmtPerfil->bindParam(':id_perfil',$id_perfil);
+    $stmtPerfil->execute();
+    $perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
+    $nomePerfil = $perfil['nome_perfil'];
+    
+    // Definição das permissões por perfil
+    $permissoes = [
+        1 => ["Cadastrar" => ["cadastro_usuario.php", "cadastro_perfil.php", "cadastro_cliente.php",
+                               "cadastro_fornecedor.php", "cadastro_produto.php", "cadastro_funcionario.php"],
+
+              "Buscar" => ["buscar_usuario.php", "buscar_perfil.php", "buscar_cliente.php",
+                           "buscar_fornecedor.php", "buscar_produto.php", "buscar_funcionario.php"],
+
+              "Alterar" => ["alterar_usuario.php", "alterar_perfil.php", "alterar_cliente.php",
+                           "alterar_fornecedor.php", "alterar_produto.php", "alterar_funcionario.php"],
+
+              "Excluir" => ["excluir_usuario.php", "excluir_perfil.php", "excluir_cliente.php",
+                           "excluir_fornecedor.php", "excluir_produto.php", "excluir_funcionario.php"]],
+
+
+        2 => ["Cadastrar" => ["cadastro_cliente.php"],
+
+              "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
+
+              "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
+
+              "Excluir" => ["excluir_produto.php"]],
+
+
+        3 => ["Cadastrar" => ["cadastro_fornecedor.php", "cadastro_produto.php"],
+
+              "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
+
+              "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
+
+              "Excluir" => ["excluir_produto.php"]],
+
+
+        4 => ["Cadastrar" => ["cadastro_cliente.php"],
+
+              "Buscar" => ["buscar_produto.php"],
+
+              "Alterar" => ["alterar_cliente.php"]],
+    ];
+
+    // Obtendo as opções disponíveis para o perfil logado
+    $opcoes_menu = $permissoes["$id_perfil"];
 ?>
 
 <!DOCTYPE html>
@@ -37,11 +89,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link src="validacoes.js" rel="text/javacript">
+    <link rel="stylesheet" href="styles.css">
+    
     <title>Cadastrar Usuario</title>
 </head>
 <body>
+    <!-- Header  -->
+    <nav>
+        <ul class="menu">
+            <?php foreach($opcoes_menu as $categoria =>$arquivos): ?>
+                <li class="dropdown">
+                    <a href="#"><?=$categoria ?></a>
+                    <ul class="dropdown-menu">
+                        <?php foreach($arquivos as $arquivo): ?>
+                            <li>
+                                <a href="<?=$arquivo ?>"><?=ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
+                            </li>
+                            <?php endforeach;?>
+                    </ul>
+                </li>
+                <?php endforeach;?>
+        </ul>
+    </nav>
+    <br>
     <h2>Cadastrar Usuario</h2>
     <form action="cadastro_usuario.php" method="POST">
         <label for="nome">Nome:</label>
@@ -63,9 +136,13 @@
 
         <button type="submit">Salvar</button>
         <button type="reset">Cancelar</button>
+        <br>
+        <a href="principal.php" class="btn btn-primary">Voltar</a>
     </form>
 
-    <a href="principal.php">Voltar</a>
+    <center>
+        <address><em>Dalton Marcelino / Tecnico em Desenvolvimento de Sistemas / DESN20242V1</em></address>
+    </center>
 
 </body>
 </html>

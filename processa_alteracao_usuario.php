@@ -33,8 +33,7 @@ session_start();
         if($stmt->execute()){
             echo "<script>alert('Usuário atualizado com sucesso!');window.location.href='buscar_usuario.php';</script>";
         } else{
-            echo "<script>alert('Erro ao atualizar usuário!');window.location.
-            href='alterar_usuario.php?id=$id_usuario';</script>";
+            echo "<script>alert('Erro ao atualizar usuário!');window.location.href='alterar_usuario.php?id=$id_usuario';</script>";
         }
 
     }

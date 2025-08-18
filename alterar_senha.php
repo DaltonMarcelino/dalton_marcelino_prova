@@ -77,5 +77,9 @@
             senha2.type = tipo;
         }
     </script>
+
+    <center>
+        <address><em>Dalton Marcelino / Tecnico em Desenvolvimento de Sistemas / DESN20242V1</em></address>
+    </center>
 </body>
 </html>
