@@ -2,33 +2,32 @@
     session_start();
     require_once 'conexao.php';
 
-    // VERIFICA SE O USUARIO TEM PERMISSÃO
-    // SUPONDO QUE O PERFIL 1 SEJA O ADMINISTRADOR
+    // VERIFICA SE O USUARIO TEM PERMISSÃO CLIENTE
+    if($_SESSION['perfil']!=4 && $_SESSION['perfil']!=1){
+        echo "<script>alert('Acesso negado!');window.location.href='principal.php';</script>";
+        exit();
+    } 
+    $usuario = []; // INICIALIZA A VARIAVEL PARA EVITAR ERROS
 
-    if($_SESSION['perfil']!=1){
-        echo "Acesso Negado!";
-    }
+    // SE O FORMULARIO FOR ENVIADO, BUSCA O USUARIO PELO ID OU NOME
+    if($_SERVER["REQUEST_METHOD"]== "POST" && !empty($_POST['busca'])){
+        $busca = trim($_POST['busca']);
 
-    if($_SERVER['REQUEST_METHOD']== "POST"){
-        $nome = $_POST['nome'];
-        $email = $_POST['email'];
-        $senha = password_hash($_POST['senha'],PASSWORD_DEFAULT);
-        $id_perfil = $_POST['id_perfil'];
+        // VERIFICA SE A BUSCA É UM NUMERO OU UM NOME.
+        if(is_numeric($busca)){
+            $sql="SELECT * FROM produto WHERE id_produto = :busca ORDER BY nome_prod ASC";
 
-        $sql = "INSERT INTO usuario(nome,email,senha,id_perfil) VALUES (:nome,:email,:senha,:id_perfil)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':busca',$busca, PDO::PARAM_INT);
+        } else {
+            $sql="SELECT * FROM produto WHERE nome_prod LIKE :busca_nome ORDER BY nome_prod ASC";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':busca_nome',"%$busca%", PDO::PARAM_STR);
+        }
+    } else {
+        $sql="SELECT * FROM produto ORDER BY nome_prod ASC";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':nome',$nome);
-        $stmt->bindParam(':email',$email);
-        $stmt->bindParam(':senha',$senha);
-        $stmt->bindParam(':id_perfil',$id_perfil);
-
-        if($stmt->execute()){
-            echo "<script>alert('Usuario cadastrado com sucesso!');</script>";
-        }
-        else{
-            echo "<script>alert('Erro ao cadastrar Usuario!');</script>";
-
-        }
     }
 
     // Obtendo o nome do perfil do usuário logado
@@ -82,6 +81,9 @@
 
     // Obtendo as opções disponíveis para o perfil logado
     $opcoes_menu = $permissoes["$id_perfil"];
+
+$stmt->execute();
+$usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -89,12 +91,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <link href="bootstrap.min.css" rel="stylesheet">
-    <link src="validacoes.js" rel="text/javacript">
     <link rel="stylesheet" href="styles.css">
-    
-    <title>Cadastrar Usuario</title>
+    <title>Buscar Usuario</title>
 </head>
 <body>
     <!-- Header  -->
@@ -115,34 +114,47 @@
         </ul>
     </nav>
     <br>
-    <h2>Cadastrar Usuario</h2>
-    <form action="cadastro_usuario.php" method="POST">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" oninput="this.value=this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g,'')" required>
 
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required>
+    <h2>Lista de Produto</h2>
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required>
-
-        <label for="id_perfil">Perfil:</label>
-        <select id="id_perfil" name="id_perfil" required>
-            <option value="1">Administrador</option>
-            <option value="2">Secretaria</option>
-            <option value="3">Almoxarifado</option>
-            <option value="4">Cliente</option>
-        </select>
-
-        <button type="submit">Salvar</button>
-        <button type="reset">Cancelar</button>
-        <br>
+    <form action="buscar_produto.php" method="POST">
+        <label for="busca">Digite o ID ou NOME</label>
+        <input type="text" id="busca" name="busca">
+        <button type="submit">Pesquisar</button><br>
         <a href="principal.php" class="btn btn-primary">Voltar</a>
+
     </form>
+
+        <?php if(!empty($usuarios)): ?>
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome do Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade</th>
+                        <th>Valor unitario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($usuarios as $usuario): ?>
+                        <tr>
+                            <td><?=htmlspecialchars($usuario['id_produto'])?></td>
+                            <td><?=htmlspecialchars($usuario['nome_prod'])?></td>
+                            <td><?=htmlspecialchars($usuario['descricao'])?></td>
+                            <td><?=htmlspecialchars($usuario['qtde'])?></td>
+                            <td><?=htmlspecialchars($usuario['valor_unit'])?></td>
+                        </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
+
+            <?php else:?>
+                <p>Nenhum Produto encontrado encontrado.</p>
+            <?php endif;?>
 
     <center>
         <address><em>Dalton Marcelino / Tecnico em Desenvolvimento de Sistemas / DESN20242V1</em></address>
     </center>
-
 </body>
 </html>

@@ -3,31 +3,32 @@
     require_once 'conexao.php';
 
     // VERIFICA SE O USUARIO TEM PERMISSÃO
-    // SUPONDO QUE O PERFIL 1 SEJA O ADMINISTRADOR
+    // SUPONDO QUE O PERFIL 4 SEJA O CLIENTE E ADM
 
-    if($_SESSION['perfil']!=1){
+    if($_SESSION['perfil']!=1 && $_SESSION['perfil']!=4 ){
         echo "Acesso Negado!";
     }
 
     if($_SERVER['REQUEST_METHOD']== "POST"){
-        $nome = $_POST['nome'];
+        $nome_cliente = $_POST['nome_cliente'];
+        $endereco = $_POST['endereco'];
+        $telefone = $_POST['telefone'];
         $email = $_POST['email'];
-        $senha = password_hash($_POST['senha'],PASSWORD_DEFAULT);
-        $id_perfil = $_POST['id_perfil'];
-
-        $sql = "INSERT INTO usuario(nome,email,senha,id_perfil) VALUES (:nome,:email,:senha,:id_perfil)";
+    
+        $sql = "INSERT INTO cliente(nome_cliente, endereco, telefone, email, id_funcionario_responsavel) 
+                VALUES (:nome_cliente, :endereco, :telefone, :email, :id_funcionario_responsavel)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':nome',$nome);
+        $stmt->bindParam(':nome_cliente',$nome_cliente);
+        $stmt->bindParam(':endereco',$endereco);
+        $stmt->bindParam(':telefone',$telefone);
         $stmt->bindParam(':email',$email);
-        $stmt->bindParam(':senha',$senha);
-        $stmt->bindParam(':id_perfil',$id_perfil);
-
+        $stmt->bindParam(':id_funcionario_responsavel',$id_funcionario_responsavel);
+    
         if($stmt->execute()){
-            echo "<script>alert('Usuario cadastrado com sucesso!');</script>";
+            echo "<script>alert('Cliente cadastrado com sucesso!');</script>";
         }
         else{
-            echo "<script>alert('Erro ao cadastrar Usuario!');</script>";
-
+            echo "<script>alert('Erro ao cadastrar cliente!');</script>";
         }
     }
 
@@ -115,30 +116,25 @@
         </ul>
     </nav>
     <br>
-    <h2>Cadastrar Usuario</h2>
-    <form action="cadastro_usuario.php" method="POST">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" oninput="this.value=this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g,'')" required>
+    <h2>Cadastrar Cliente</h2>
+    <form action="cadastro_cliente.php" method="POST" onsubmit="return validarCliente()">
+    <label for="nome_cliente">Nome:</label>
+    <input type="text" id="nome_cliente" name="nome_cliente" oninput="this.value=this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g,'')" required>
 
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required>
+    <label for="endereco">Endereço:</label>
+    <input type="text" id="endereco" name="endereco" required>
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required>
+    <label for="telefone">Telefone:</label>
+    <input type="text" id="telefone" name="telefone" oninput="this.value=this.value.replace(/\D/g,'').replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3')" maxlength="15" required>
 
-        <label for="id_perfil">Perfil:</label>
-        <select id="id_perfil" name="id_perfil" required>
-            <option value="1">Administrador</option>
-            <option value="2">Secretaria</option>
-            <option value="3">Almoxarifado</option>
-            <option value="4">Cliente</option>
-        </select>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required>
 
-        <button type="submit">Salvar</button>
-        <button type="reset">Cancelar</button>
-        <br>
-        <a href="principal.php" class="btn btn-primary">Voltar</a>
-    </form>
+    <button type="submit">Salvar</button>
+    <button type="reset">Cancelar</button>
+    <br>
+    <a href="principal.php" class="btn btn-primary">Voltar</a>
+</form>
 
     <center>
         <address><em>Dalton Marcelino / Tecnico em Desenvolvimento de Sistemas / DESN20242V1</em></address>
