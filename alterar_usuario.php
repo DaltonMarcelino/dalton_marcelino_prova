@@ -80,9 +80,7 @@
  
          4 => ["Cadastrar" => ["cadastro_cliente.php"],
  
-               "Buscar" => ["buscar_produto.php"],
- 
-               "Alterar" => ["alterar_cliente.php"]],
+               "Buscar" => ["buscar_produto.php"]],
      ];
  
      // Obtendo as opções disponíveis para o perfil logado
@@ -120,7 +118,8 @@
     </nav>
     <br>
     <h2>Alterar usuario</h2>
-
+    
+    <!-- Forms para buscar o ID ou NOME do usuario -->
     <form action="alterar_usuario.php"  method="POST">
         <label for="busca_usuario">Digite o id ou nome do usuario</label>
         <input type="text" id="busca_usuario" name="busca_usuario" required onkeyup="buscarSugestoes()">
@@ -154,7 +153,7 @@
             <!-- Se o usuario logado for ADM, exibir opção de alterar senha -->
             <?php if($_SESSION['perfil'] == 1): ?>
                 <label for="nova_senha">Nova senha</label>
-                <input type="password" id="nova_senha" name="nova_senha">
+                <input type="password" id="nova_senha" name="nova_senha" minlength="3" maxlength="15" required title="A senha deve ter no mínimo 3 e no máximo 15 caracteres">
             <?php endif; ?>
 
             <button type="submit">Alterar</button>
