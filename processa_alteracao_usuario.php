@@ -2,11 +2,13 @@
 session_start();
     require 'conexao.php';
 
+    // Verifica se o usuario é ADM, se não for da acesso negado.
     if($_SESSION['perfil'] != 1){
         echo "<script>alert('Acesso Negado!');window.location.href='principal.php';</script>";
         exit();
     }
 
+    // Pega por metodo $_POST
     if($_SERVER['REQUEST_METHOD'] == "POST"){
         $id_usuario = $_POST['id_usuario'];
         $nome = $_POST['nome'];
