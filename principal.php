@@ -51,9 +51,8 @@
 
         4 => ["Cadastrar" => ["cadastro_cliente.php"],
 
-              "Buscar" => ["buscar_produto.php"],
+              "Buscar" => ["buscar_produto.php"]]
 
-              "Alterar" => ["alterar_cliente.php"]],
     ];
 
     // Obtendo as opções disponíveis para o perfil logado
@@ -103,6 +102,5 @@
     <center>
         <address><em>Dalton Marcelino / Tecnico em Desenvolvimento de Sistemas / DESN20242V1</em></address>
     </center>
-    
 </body>
 </html>
