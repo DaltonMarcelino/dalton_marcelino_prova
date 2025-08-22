@@ -9,7 +9,7 @@
     } 
     $usuario = []; // INICIALIZA A VARIAVEL PARA EVITAR ERROS
 
-    // SE O FORMULARIO FOR ENVIADO, BUSCA O USUARIO PELO ID OU NOME
+    // SE O FORMULARIO FOR ENVIADO, BUSCA O CLIENTE PELO ID OU NOME
     if($_SERVER["REQUEST_METHOD"]== "POST" && !empty($_POST['busca'])){
         $busca = trim($_POST['busca']);
 
@@ -74,9 +74,7 @@
 
         4 => ["Cadastrar" => ["cadastro_cliente.php"],
 
-              "Buscar" => ["buscar_produto.php"],
-
-              "Alterar" => ["alterar_cliente.php"]],
+              "Buscar" => ["buscar_produto.php"]],
     ];
 
     // Obtendo as opções disponíveis para o perfil logado
@@ -115,16 +113,18 @@ $usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
     </nav>
     <br>
 
-    <h2>Lista de Usuario</h2>
+    <h2>Lista de Cliente</h2>
 
+    <!-- Forms para buscar o ID ou NOME do cliente -->
     <form action="buscar_cliente.php" method="POST">
         <label for="busca">Digite o ID ou NOME</label>
-        <input type="text" id="busca" name="busca">
+        <input type="text" id="busca" name="busca" required>
         <button type="submit">Pesquisar</button><br>
         <a href="principal.php" class="btn btn-primary">Voltar</a>
 
     </form>
 
+        <!-- Tabela de consulta de CLIENTES-->
         <?php if(!empty($usuarios)): ?>
             <table class="table table-striped table-hover table-bordered">
                 <thead class="table-dark">
