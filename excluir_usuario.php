@@ -130,6 +130,8 @@ session_start();
             </tr>
         </thead>
         <tbody>
+
+            <!-- TABELA DE EXCLUIR USUARIOS -->
             <?php foreach($usuarios as $usuario): ?>
                 <tr>
                     <td><?= htmlspecialchars($usuario['id_usuario'])?></td>
