@@ -117,14 +117,16 @@ $usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
 
     <h2>Lista de Usuario</h2>
 
+    <!-- Forms para buscar o ID ou NOME do usuario -->
     <form action="buscar_usuario.php" method="POST">
         <label for="busca">Digite o ID ou NOME</label>
-        <input type="text" id="busca" name="busca">
+        <input type="text" id="busca" name="busca" required>
         <button type="submit">Pesquisar</button><br>
         <a href="principal.php" class="btn btn-primary">Voltar</a>
 
     </form>
 
+        <!-- Tabela de consulta de USUARIOS-->
         <?php if(!empty($usuarios)): ?>
             <table class="table table-striped table-hover table-bordered">
                 <thead class="table-dark">
