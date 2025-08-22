@@ -15,6 +15,7 @@
         $senha = password_hash($_POST['senha'],PASSWORD_DEFAULT);
         $id_perfil = $_POST['id_perfil'];
 
+        // Comando para cadastrar com INSERT no banco na TABELA USUARIO
         $sql = "INSERT INTO usuario(nome,email,senha,id_perfil) VALUES (:nome,:email,:senha,:id_perfil)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':nome',$nome);
@@ -124,7 +125,7 @@
         <input type="email" id="email" name="email" required>
 
         <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required>
+        <input type="password" id="senha" name="senha" minlength="3" maxlength="15" required title="A senha deve ter no mínimo 3 e no máximo 15 caracteres">
 
         <label for="id_perfil">Perfil:</label>
         <select id="id_perfil" name="id_perfil" required>
