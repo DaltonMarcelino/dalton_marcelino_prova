@@ -9,12 +9,14 @@
         echo "Acesso Negado!";
     }
 
+    // Pega por metodo POST
     if($_SERVER['REQUEST_METHOD']== "POST"){
         $nome_cliente = $_POST['nome_cliente'];
         $endereco = $_POST['endereco'];
         $telefone = $_POST['telefone'];
         $email = $_POST['email'];
-    
+        
+        // Comando para cadastrar com INSERT no banco na TABELA CLIENTE
         $sql = "INSERT INTO cliente(nome_cliente, endereco, telefone, email, id_funcionario_responsavel) 
                 VALUES (:nome_cliente, :endereco, :telefone, :email, :id_funcionario_responsavel)";
         $stmt = $pdo->prepare($sql);
@@ -23,7 +25,8 @@
         $stmt->bindParam(':telefone',$telefone);
         $stmt->bindParam(':email',$email);
         $stmt->bindParam(':id_funcionario_responsavel',$id_funcionario_responsavel);
-    
+
+        // Verifica se deu certo o cadastro do cliente e emite um alerta
         if($stmt->execute()){
             echo "<script>alert('Cliente cadastrado com sucesso!');</script>";
         }
@@ -76,9 +79,7 @@
 
         4 => ["Cadastrar" => ["cadastro_cliente.php"],
 
-              "Buscar" => ["buscar_produto.php"],
-
-              "Alterar" => ["alterar_cliente.php"]],
+              "Buscar" => ["buscar_produto.php"]]
     ];
 
     // Obtendo as opções disponíveis para o perfil logado
@@ -117,15 +118,18 @@
     </nav>
     <br>
     <h2>Cadastrar Cliente</h2>
+
+    <!-- Formulario para Cadastrar Cliente -->
     <form action="cadastro_cliente.php" method="POST" onsubmit="return validarCliente()">
     <label for="nome_cliente">Nome:</label>
     <input type="text" id="nome_cliente" name="nome_cliente" oninput="this.value=this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g,'')" required>
 
     <label for="endereco">Endereço:</label>
-    <input type="text" id="endereco" name="endereco" required>
+    <input type="text" id="endereco" name="endereco" maxlength="254" required>
 
     <label for="telefone">Telefone:</label>
-    <input type="text" id="telefone" name="telefone" oninput="this.value=this.value.replace(/\D/g,'').replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3')" maxlength="15" required>
+    <input type="text" id="telefone" name="telefone" oninput="this.value=this.value.replace(/\D/g,'').replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3')" 
+    class="form-control" pattern="\(\d{2}\)\s\d{5}-\d{4}" title="Digite no mínimo 11 números" maxlength="15" required>
 
     <label for="email">E-mail:</label>
     <input type="email" id="email" name="email" required>
