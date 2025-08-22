@@ -8,11 +8,13 @@
         exit();
     }
 
+    // Pega valores e atribui a uma variavel(valores definido por $_POST["..."] e $_SESSION)
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_usuario = $_SESSION['id_usuario'];
         $nova_senha = $_POST['nova_senha'];
         $confirmar_senha = $_POST['confirmar_senha'];
 
+        // Emite um alert para validação de nova senha
         if($nova_senha !== $confirmar_senha) {
             echo "<script>alert('As senhas não coincidem!');</script>";
         }
@@ -31,6 +33,7 @@
             $stmt->bindParam(':senha',$senha_hash);
             $stmt->bindParam(':id',$id_usuario);
 
+            // Verifica se a execução foi bem sucedida ou não.
             if($stmt->execute()) {
                 session_destroy(); // Finaliza a sessão
                 echo "<script>alert('Senha alterada com sucesso! Faça login novamente');window.location.href='index.php';</script>";
@@ -54,6 +57,7 @@
     <h2>Alterar Senha</h2>
     <p>Olá, <strong><?php echo $_SESSION['usuario'];?></strong>Digite sua nova senha abaixo:</p>
 
+    <!-- Formulário para definir nova senha do usuario -->
     <form action="alterar_senha.php" method="POST">
         <label for="nova_senha">Nova Senha</label>
         <input type="password" id="nova_senha" name="nova_senha" required>
@@ -68,6 +72,7 @@
         <button type="submit">Salvar nova senha</button>
     </form>
 
+   <!-- Script para mostrar senha(checkbox) -->
     <script>
         function mostrarSenha() {
             var senha1 = document.getElementById("nova_senha");
